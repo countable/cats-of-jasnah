@@ -6,3 +6,5 @@ I made this game for my 3 year old to develop logical language skills. It progre
 Enjoy!
 
 [Play the game](https://countable.github.io/cats-of-jasnah)
+
+![cats of jasnah](./cats.png)
