@@ -1,49 +1,155 @@
 <html>
 <style>
-h1 {
+body {
+  background: #FFDDEE;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  margin: 0;
+  padding: 0;
   text-align: center;
-  font-size: 10em;
-  animation: spin 4s infinite;
-  position: absolute;
-  left: 20%;
 }
+button {
+  cursor: pointer;
+  padding: 5px;
+}
+p {
+  font-size: 22px;
+}
+
 .spinning {
   animation: 2s spin infinite;
 }
 .hidden {
   display:none
 }
+svg .face {
+  fill:white
+}
+.smile, .frown {
+  display: none
+}
+.ducks .smile, .ducks .frown{
+  display: inline;
+  stroke: none;
+  fill:orange;
+}
+.mouth {
+  stroke: black;
+}
 .red .face {
   fill:red
 }
+.blue .face {
+  fill:#8888FF
+}
+.yellow .face {
+  fill:yellow
+}
+
 
 @keyframes spin {
   0% {transform: translate(0, 0) rotate(0deg);}
   50% {transform: translate(1em, -1em) rotate(360deg);}
   100% {transform: translate(0, 0) rotate(0deg);}
 }
+
+.bouncing {
+	animation: bounce 2s infinite;
+	animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
+}
+@keyframes bounce {
+	0%   { transform: scale(1,1)      translateY(0); }
+	10%  { transform: scale(1.1,.9)   translateY(0); }
+	30%  { transform: scale(.9,1.1)   translateY(-50px); }
+	50%  { transform: scale(1.05,.95) translateY(0); }
+	57%  { transform: scale(1,1)      translateY(-5px); }
+	64%  { transform: scale(1,1)      translateY(0); }
+	100% { transform: scale(1,1)      translateY(0); }
+}
+h1 {
+ font-size: 2em;
+ font-variant: small-caps;
+ text-align: center;
+ text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+ color: white;
+ margin: 0;
+}
+
+.level-picker {
+	 box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+	background: #ffeef8;
+	 padding: 5px;
+	 margin: 0 -25px;
+	 text-align: center;
+}
+li {
+	padding: 5px;
+	list-style: none;
+	cursor: pointer;
+	margin: 7px;
+	 box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+	border-radius: 5px;
+	background: #ffeef8;
+}
+ul {
+margin: 0 ; padding: 0
+}
 </style>
 <body>
+<h1>Cats of Jasnah</h1>
 
-<button onclick="make_cats()">play</button>
+<div class="level-picker">
+	LEVEL: 
+	<button onclick="set_level(0)">0</button>
+	<button onclick="set_level(1)">1</button>
+	<button onclick="set_level(2)">2</button>
+	<button onclick="set_level(3)">3</button>
+	<button onclick="set_level(4)">4</button>
+</div>
+
 <p></p>
-<svg width='200' height='300' class='hidden'>
-  <circle class='face' cx='70' cy='95' r='50' style='stroke:black' />
-	<circle cx="55" cy="80" r="5" stroke="black" fill="#339933"/>
-	<circle cx="85" cy="80" r="5" stroke="black" fill="#339933"/>
-	<g id="whiskers">
-	   <line x1="75" y1="95" x2="135" y2="85" style="stroke: black;"/>
-	   <line x1="75" y1="95" x2="135" y2="105" style="stroke: black;"/>
-	</g>
+
+<div class='instructions'>
+<b>Instructions:</b><br><br>
+
+Choose a level to start.<br><br>
+<ul>
+<li onclick='set_level(0)'>0. counting</li>
+<li onclick='set_level(1)'>1. one category</li>
+<li onclick='set_level(2)'>2. two categories</li>
+<li onclick='set_level(3)'>3. conjunction</li>
+<li onclick='set_level(4)'>4. triple conjunction</li>
+</ul>
+</div>
+<svg width='200' height='150' class='hidden'>
+	<ellipse class='face' cx='70' cy='95' ry='45' rx='55' style='stroke:#ff88dd' />
+	<ellipse cx="45" cy="90" rx="5" ry="7" fill="black"/>
+	<ellipse cx="95" cy="90" rx="5" ry="7" stroke="black" fill="black"/>
 	
+	<g id="whiskers" class="whiskers">
+	   <line x1="105" y1="100" x2="135" y2="90" style="stroke: black;"/>
+	   <line x1="105" y1="100" x2="135" y2="110" style="stroke: black;"/>
+	</g>
 	<use xlink:href="#whiskers" transform="scale(-1 1) translate(-140 0)"/>
-	<polyline points="108 62,  90 10,  70 45,  50, 10,  32, 62"
-   style="stroke: black; fill: none;" />
-<!-- mouth -->
-<polyline points="35 110, 45 120, 95 120, 105, 110"
-    style="stroke: black; fill: none;" />
-	<path d="M 75 90 L 65 90 A 5 10 0  0 0 75 90"
-   style="stroke: black; fill: #ffcccc"/>
+	<!-- ears -->
+	<g id="earz" class="ears">
+		<polyline points="108 62,  103 40,  80 51"
+   style="stroke: none; fill: #ff88dd;" />
+	</g>
+   	<use xlink:href="#earz" transform="scale(-1 1) translate(-140 0)"/>
+
+	<!-- mouth -->
+	<!--<polyline points="35 110, 45 120, 95 120, 105, 110"
+    style="stroke: black; fill: none;" />-->
+
+	<path class='frown' d="M 50 110 C 70 90, 80 90, 90 110" stroke="black" fill="transparent"/>
+	<path class='smile' d="M 50 110 C 70 120, 80 120, 90 110" stroke="black" fill="transparent"/>
+	<path class='mouth' d="M 55 110 C 70 115, 80 115, 85 110" stroke="black" fill="transparent"/>
+
+	<!-- nose -->
+	<!--<path d="M 75 90 L 65 90 A 5 10 0  0 0 75 90"
+   style="stroke: #ff88dd; fill: #ffcccc"/>-->
+    
 	
 
 	
@@ -55,25 +161,94 @@ h1 {
   integrity="sha256-BTlTdQO9/fascB1drekrDVkaKd9PkwBymMlHOiG+qLI="
   crossorigin="anonymous"></script>
 <script>
-const ATTS = ['red', 'spinning']
-var cur_att;
-var is_reversed;
+const COLOR_ATTS = ['red', 'blue', 'yellow']
+const MOTION_ATTS = ['bouncing', 'spinning']
+const ANIMAL_ATTS = ['ducks']
+const ALL_ATTS = COLOR_ATTS.concat(MOTION_ATTS).concat(ANIMAL_ATTS)
+var ATTS;
+var cur_atts = {};
+var cur_level;
+let clue;
+
+var pick_rand = function(seq) {
+	return seq[Math.floor(Math.random()*seq.length)]
+}
+var set_level = function(level) {
+    $('.instructions').hide()
+	cur_level = level;
+	$('button').css('background-color','white').eq(level).css('background-color', 'yellow')
+	make_cats()
+}
+var cats_for_level = function(level) {
+	min_cats = level + 1;
+	max_cats = level + 5;
+	if (level === 4) {
+		min_cats += 3
+		max_cats += 3
+	} 
+	return Math.floor(Math.random()*(max_cats+1-min_cats)) + min_cats
+}
+var set_avail_atts = function() {
+	if (cur_level == 0) {
+	    ATTS = []
+	} else if (cur_level == 1) {
+		ATTS = [pick_rand(ALL_ATTS)]
+	} else if (cur_level == 2 || cur_level == 3) {
+		ATTS = [
+			pick_rand(COLOR_ATTS),
+			pick_rand(MOTION_ATTS)
+		]
+	} else if (cur_level == 4) {
+		ATTS = [
+			pick_rand(COLOR_ATTS),
+			pick_rand(MOTION_ATTS),
+			pick_rand(ANIMAL_ATTS)
+		]
+	}
+}
+
+const permute_atts = function() {
+	cur_atts = {}
+	for (let i=0;i<ATTS.length;i++) {
+		if (Math.random() > 0.2) {
+			cur_atts[ATTS[i]] = (cur_level > 2 ? Math.random() > 0.4: true)
+		}
+	}
+}
+
+const speak = function(text, opts) {
+	opts = opts || {}
+	$("p").text(text)
+	responsiveVoice.speak(text, "US English Female", opts)
+
+}
 
 var make_cats = function() {
-	
-	cur_att = Math.floor(Math.random()*ATTS.length)
+	set_avail_atts()
+	permute_atts()
 	is_reversed = Math.random() < 0.5
-	const text = "how many cats are "
-		+ (is_reversed ? 'not ' : '')
-		+ ATTS[cur_att] +"?"
-	$('p').text(text)
-	responsiveVoice.speak(text, "US English Female", {
-		onend: function() {
+	let text = "how many cats"
+	if (Object.keys(cur_atts).length) {
+		text += " are "
+	
+		let conjunctions = []
+		for (let att in cur_atts) {
+			conjunctions.push(
+				(cur_atts[att] ? '' : 'not ')
+				+ att)
 		}
-	})
+		console.log(conjunctions)
+		text += conjunctions.join(" and are ")
+	} else {
+		text += " are here"
+	}
+	text += "?"
+	clue = text;
+	speak(text)
+	
   
     $('svg:gt(0)').remove()
-	var num_cats = Math.floor(Math.random()*6)+1;
+	var num_cats = cats_for_level(cur_level)
 	for (var i=0;i<num_cats;i++) {
 		$('svg').eq(0).clone().appendTo('body')
 		.each(function(svg){
@@ -94,34 +269,35 @@ function sound(s) {
 
 $('body').keyup(function(e){
 	
-	console.log(e.key)
-	
 	if (!/\d/.test(e.key)) return
+
 	let answer = $('svg:visible').filter(function(svg){
 		
-		/*let match = true
-		for (var att=0;att<ATTS.length;att++) {
-			const haz = $(this).hasClass(ATTS[att])
-		}*/
-		var haz = $(this).hasClass(ATTS[cur_att])
-		if (is_reversed) haz = !haz
-		return haz
+		let match = true
+		for (let att in cur_atts) {
+			match = match && 
+			  (cur_atts[att] ? $(this).hasClass(att) : !$(this).hasClass(att))
+		}
+		return match
 	}).length
 	
-
-	responsiveVoice.speak(''+e.key, "US English Male", {
-	onend: function(){
-		if (parseInt(e.key) === answer) {
-		responsiveVoice.speak("That's right, " + answer, "US English Female", {
-		onend: function(){
-			make_cats()
-		}})
-		} else {
-			responsiveVoice.speak("Good try, but that's wrong.", "US English Female")
-		}
-	}});
+	console.log('answer:', answer)
+	if (parseInt(e.key) === answer) {
+		speak("That's right, " + answer, {
+			onend: function(){
+				make_cats()
+			}})
+	} else {
+		speak("Good try, but that's wrong.", {
+			onend: function() {
+				speak(clue)
+			}
+		})
+	}
 
 })
+
+
 </script>
 
 </body>
