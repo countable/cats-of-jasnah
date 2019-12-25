@@ -161,6 +161,16 @@ svg {
 	height: 75px;
 }
 }
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
 </style>
 </head>
 <body>
@@ -172,7 +182,7 @@ svg {
 	LEVEL: <span class='level-number'></span>
 </div>
 
-<div class='number-bar'>
+<div class='number-bar no-select'>
 	<div class='number-line'>
 		<span onclick='submit(1)'>1</span>
 		<span onclick='submit(2)'>2</span>
