@@ -287,6 +287,7 @@ var set_level = function(level) {
 // returns whether a given value is to be negated.
 var level_get_negation = function(level) {
 	if (level === 2) return false
+	if (level === 6) return true
 	if (level >= 5) return Math.random() > 0.4
 	return true
 }
