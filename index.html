@@ -1,4 +1,7 @@
 <html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
 body {
   background: #FFDDEE;
@@ -9,12 +12,18 @@ body {
   text-align: center;
   overflow: hidden;
 }
+html, 
+body {
+    height: 100%;
+}
 button {
   cursor: pointer;
   padding: 5px;
 }
 p {
   font-size: 22px;
+  margin: 0;
+  padding: 1em 0 0 0;
 }
 
 .spinning {
@@ -68,20 +77,34 @@ svg .face {
 	100% { transform: scale(1,1)      translateY(0); }
 }
 h1 {
- font-size: 2em;
- font-variant: small-caps;
- text-align: center;
- text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
- color: white;
- margin: 0;
+	font-size: 2em;
+	font-variant: small-caps;
+	text-align: center;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+	color: white;
+	margin: 0;
+	cursor:pointer;
 }
-
-.level-picker {
-	 box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+.back, .forward {
+	font-size: 25px;
+	position: fixed;
+	top: 0;
+	width: 25px;
+	cursor: pointer;
+}
+.back {
+	left: 0;
+}
+.forward {
+	right: 0
+}
+.level-display {
+	box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
 	background: #ffeef8;
-	 padding: 5px;
-	 margin: 0;
-	 text-align: center;
+	padding: 5px;
+	margin: 0;
+	text-align: center;
+	display: none
 }
 .number-bar {
 	position: fixed;
@@ -89,13 +112,21 @@ h1 {
 	left: 0;
 	right: 0;
 	overflow: hidden;
-	height: 60px;
+	height: 15vw;
 	display: none;
+	font-size: 0.5vw;
+}
+.number-bar .desc {
+	font-size: 14px;
+	opacity: 0.7;
+}
+.number-line {
+	
 }
 .number-bar span {
 	cursor: pointer;
-	font-size: 1.8em;
-	padding: 0.1em 0.5em;
+	font-size: 7vw;
+	padding: 0.8vw 2.5vw;
 	box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
 	background: #ffeef8;
 }
@@ -104,40 +135,58 @@ li {
 	list-style: none;
 	cursor: pointer;
 	margin: 7px;
-	 box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+	box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
 	border-radius: 5px;
 	background: #ffeef8;
 }
 ul {
-margin: 0 ; padding: 0
+	margin: 0;
+	padding: 0;
+}
+svg {
+	height: 14vmax;
+	width: 14vmax;
+}
+/*some vmax/vh elements get crazy at hi-res, cap their size.*/
+@media screen and (min-width: 1024px) {
+svg {
+	height: 160px;
+	width: 140px;
+}
+.number-bar span {
+	padding: 6px 24px;
+	font-size: 24px;
+}
+.number-bar {
+	height: 75px;
+}
 }
 </style>
+</head>
 <body>
-<h1>Cats of Jasnah</h1>
+<div class='back' onclick='set_level(Math.max(0,cur_level-1))'>&larr;</div>
+<div class='forward' onclick='set_level(Math.min(7,cur_level+1))'>&rarr;</div>
+<h1 onclick='window.location.reload()'>Cats of Jasnah</h1>
 
-<div class="level-picker">
-	LEVEL: 
-	<button onclick="set_level(0)">0</button>
-	<button onclick="set_level(1)">1</button>
-	<button onclick="set_level(2)">2</button>
-	<button onclick="set_level(3)">3</button>
-	<button onclick="set_level(4)">4</button>
-	<button onclick="set_level(5)">5</button>
+<div class="level-display">
+	LEVEL: <span class='level-number'></span>
 </div>
 
 <div class='number-bar'>
-	<span onclick='submit(1)'>1</span>
-	<span onclick='submit(2)'>2</span>
-	<span onclick='submit(3)'>3</span>
-	<span onclick='submit(4)'>4</span>
-	<span onclick='submit(5)'>5</span>
-	<span onclick='submit(6)'>6</span>
-	<span onclick='submit(7)'>7</span>
-	<span onclick='submit(8)'>8</span>
-	<span onclick='submit(9)'>9</span>
-	<span onclick='submit(0)'>0</span>
-	<br>
+	<div class='number-line'>
+		<span onclick='submit(1)'>1</span>
+		<span onclick='submit(2)'>2</span>
+		<span onclick='submit(3)'>3</span>
+		<span onclick='submit(4)'>4</span>
+		<span onclick='submit(5)'>5</span>
+		<span onclick='submit(6)'>6</span>
+		<span onclick='submit(7)'>7</span>
+		<span onclick='submit(8)'>8</span>
+		<span onclick='submit(9)'>9</span>
+		<span onclick='submit(0)'>0</span>
+	</div>
 	<div class='desc'>
+		<br>
 		To answer questions, tap the numbers above or just use your keyboard.
 	</div>
 </div>
@@ -152,13 +201,16 @@ Choose a level to start.<br><br>
 <ul>
 <li onclick='set_level(0)'>0. counting</li>
 <li onclick='set_level(1)'>1. one category</li>
-<li onclick='set_level(1)'>2. negation</li>
-<li onclick='set_level(2)'>3. conjunction</li>
-<li onclick='set_level(3)'>4. negation and conjunction</li>
-<li onclick='set_level(4)'>5. triple conjunction</li>
+<li onclick='set_level(2)'>2. negation</li>
+<li onclick='set_level(3)'>3. combination</li>
+<li onclick='set_level(4)'>4. conjunction</li>
+<li onclick='set_level(5)'>5. negation and conjunction</li>
+<li onclick='set_level(6)'>6. triple combination</li>
+<li onclick='set_level(7)'>7. triple conjunction</li>
 </ul>
 </div>
-<svg width='200' height='150' class='hidden'>
+<br>
+<svg class='hidden' viewbox = "0 0 160 140">
 	<ellipse class='face' cx='70' cy='95' ry='45' rx='55' style='stroke:#ff88dd' />
 	<ellipse cx="45" cy="90" rx="5" ry="7" fill="black"/>
 	<ellipse cx="95" cy="90" rx="5" ry="7" stroke="black" fill="black"/>
@@ -204,15 +256,20 @@ const ANIMAL_ATTS = ['ducks']
 const ALL_ATTS = COLOR_ATTS.concat(MOTION_ATTS).concat(ANIMAL_ATTS)
 var ATTS;
 var cur_atts = {};
-var cur_level;
+var cur_level = 0;
 let clue;
 
 var pick_rand = function(seq) {
 	return seq[Math.floor(Math.random()*seq.length)]
 }
 var set_level = function(level) {
+	// initialization
     $('.instructions').hide()
+	$('#forkongithub').hide()
     $('.number-bar').show()
+	$(".level-display").show()
+	
+	$(".level-number").text(level)
 	cur_level = level;
 	$('button').css('background-color','white').eq(level).css('background-color', 'yellow')
 	make_cats()
@@ -220,16 +277,13 @@ var set_level = function(level) {
 // returns whether a given value is to be negated.
 var level_get_negation = function(level) {
 	if (level === 2) return false
-	if (level > 3) return Math.random() > 0.4
+	if (level >= 5) return Math.random() > 0.4
 	return true
 }
 var cats_for_level = function(level) {
 	min_cats = level + 1;
 	max_cats = level + 5;
-	if (level === 5) {
-		min_cats += 3
-		max_cats += 3
-	}
+
 	return Math.floor(Math.random()*(max_cats+1-min_cats)) + min_cats
 }
 var set_avail_atts = function() {
@@ -237,12 +291,12 @@ var set_avail_atts = function() {
 	    ATTS = []
 	} else if (cur_level <= 2) {
 		ATTS = [pick_rand(ALL_ATTS)]
-	} else if (cur_level <= 4) {
+	} else if (cur_level <= 5) {
 		ATTS = [
 			pick_rand(COLOR_ATTS),
 			pick_rand(MOTION_ATTS)
 		]
-	} else if (cur_level == 5) {
+	} else {
 		ATTS = [
 			pick_rand(COLOR_ATTS),
 			pick_rand(MOTION_ATTS),
@@ -250,7 +304,22 @@ var set_avail_atts = function() {
 		]
 	}
 }
-
+const get_level_num_adjectives = function(level, keys) {
+	// get the number of categories used as adjectives, given a list of
+	// categories. More is generally
+	// easier.
+	let pos = Math.floor(Math.random()*(keys.length+1))
+	if (level == 3) pos = keys.length // combination level
+	if (level == 4) pos = 0 // conjunction level
+	if (level < 7) { // all but one an adjective before level 7
+	    if (pos > keys.length - 1) {
+			pos = keys.length - 1
+		}
+	} else {
+		pos = 0
+	}
+	return pos
+}
 const permute_atts = function() {
 	cur_atts = {}
 	for (let i=0;i<ATTS.length;i++) {
@@ -270,20 +339,35 @@ var make_cats = function() {
 	set_avail_atts()
 	permute_atts()
 	is_reversed = Math.random() < 0.5
-	let text = "how many cats"
-	if (Object.keys(cur_atts).length) {
-		text += " are "
+	let text = "how many "
+	const keys = Object.keys(cur_atts)
+	const prefix_pos = get_level_num_adjectives(cur_level, keys)
+	const prefix_keys = keys.slice(0,prefix_pos)
+	if (prefix_keys.length) {
+		let prefix_words = []
+		for (let att in prefix_keys) {
+			prefix_words.push(
+				(cur_atts[prefix_keys[att]] ? '' : 'not-')
+				+ prefix_keys[att])
+		}
+		text += prefix_words.join(", ") + " "
+		// ducks is just 'duck' when used as an adjective
+		text = text.replace("ducks", "duck")
+	}
+	postfix_keys = keys.slice(prefix_pos)
+	if (postfix_keys.length) {
+		text += "cats are "
 	
 		let conjunctions = []
-		for (let att in cur_atts) {
+		for (let att in postfix_keys) {
 			conjunctions.push(
-				(cur_atts[att] ? '' : 'not ')
-				+ att)
+				(cur_atts[postfix_keys[att]] ? '' : 'not ')
+				+ postfix_keys[att])
 		}
 		console.log(conjunctions)
 		text += conjunctions.join(" and are ")
 	} else {
-		text += " are here"
+		text += "cats are here"
 	}
 	text += "?"
 	clue = text;
