@@ -7,6 +7,7 @@ body {
   margin: 0;
   padding: 0;
   text-align: center;
+  overflow: hidden;
 }
 button {
   cursor: pointer;
@@ -79,8 +80,24 @@ h1 {
 	 box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
 	background: #ffeef8;
 	 padding: 5px;
-	 margin: 0 -25px;
+	 margin: 0;
 	 text-align: center;
+}
+.number-bar {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+	height: 60px;
+	display: none;
+}
+.number-bar span {
+	cursor: pointer;
+	font-size: 1.8em;
+	padding: 0.1em 0.5em;
+	box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+	background: #ffeef8;
 }
 li {
 	padding: 5px;
@@ -105,8 +122,25 @@ margin: 0 ; padding: 0
 	<button onclick="set_level(2)">2</button>
 	<button onclick="set_level(3)">3</button>
 	<button onclick="set_level(4)">4</button>
+	<button onclick="set_level(5)">5</button>
 </div>
 
+<div class='number-bar'>
+	<span onclick='submit(1)'>1</span>
+	<span onclick='submit(2)'>2</span>
+	<span onclick='submit(3)'>3</span>
+	<span onclick='submit(4)'>4</span>
+	<span onclick='submit(5)'>5</span>
+	<span onclick='submit(6)'>6</span>
+	<span onclick='submit(7)'>7</span>
+	<span onclick='submit(8)'>8</span>
+	<span onclick='submit(9)'>9</span>
+	<span onclick='submit(0)'>0</span>
+	<br>
+	<div class='desc'>
+		To answer questions, tap the numbers above or just use your keyboard.
+	</div>
+</div>
 <p></p>
 
 <div class='instructions'>
@@ -116,9 +150,10 @@ Choose a level to start.<br><br>
 <ul>
 <li onclick='set_level(0)'>0. counting</li>
 <li onclick='set_level(1)'>1. one category</li>
-<li onclick='set_level(2)'>2. two categories</li>
-<li onclick='set_level(3)'>3. conjunction</li>
-<li onclick='set_level(4)'>4. triple conjunction</li>
+<li onclick='set_level(1)'>2. negation</li>
+<li onclick='set_level(2)'>3. conjunction</li>
+<li onclick='set_level(3)'>4. negation and conjunction</li>
+<li onclick='set_level(4)'>5. triple conjunction</li>
 </ul>
 </div>
 <svg width='200' height='150' class='hidden'>
@@ -175,30 +210,37 @@ var pick_rand = function(seq) {
 }
 var set_level = function(level) {
     $('.instructions').hide()
+    $('.number-bar').show()
 	cur_level = level;
 	$('button').css('background-color','white').eq(level).css('background-color', 'yellow')
 	make_cats()
 }
+// returns whether a given value is to be negated.
+var level_get_negation = function(level) {
+	if (level === 2) return false
+	if (level > 3) return Math.random() > 0.4
+	return true
+}
 var cats_for_level = function(level) {
 	min_cats = level + 1;
 	max_cats = level + 5;
-	if (level === 4) {
+	if (level === 5) {
 		min_cats += 3
 		max_cats += 3
-	} 
+	}
 	return Math.floor(Math.random()*(max_cats+1-min_cats)) + min_cats
 }
 var set_avail_atts = function() {
 	if (cur_level == 0) {
 	    ATTS = []
-	} else if (cur_level == 1) {
+	} else if (cur_level <= 2) {
 		ATTS = [pick_rand(ALL_ATTS)]
-	} else if (cur_level == 2 || cur_level == 3) {
+	} else if (cur_level <= 4) {
 		ATTS = [
 			pick_rand(COLOR_ATTS),
 			pick_rand(MOTION_ATTS)
 		]
-	} else if (cur_level == 4) {
+	} else if (cur_level == 5) {
 		ATTS = [
 			pick_rand(COLOR_ATTS),
 			pick_rand(MOTION_ATTS),
@@ -211,7 +253,7 @@ const permute_atts = function() {
 	cur_atts = {}
 	for (let i=0;i<ATTS.length;i++) {
 		if (Math.random() > 0.2) {
-			cur_atts[ATTS[i]] = (cur_level > 2 ? Math.random() > 0.4: true)
+			cur_atts[ATTS[i]] = level_get_negation(cur_level)
 		}
 	}
 }
@@ -220,7 +262,6 @@ const speak = function(text, opts) {
 	opts = opts || {}
 	$("p").text(text)
 	responsiveVoice.speak(text, "US English Female", opts)
-
 }
 
 var make_cats = function() {
@@ -270,7 +311,10 @@ function sound(s) {
 $('body').keyup(function(e){
 	
 	if (!/\d/.test(e.key)) return
+	submit(parseInt(e.key))
+})
 
+const submit = function(value) {
 	let answer = $('svg:visible').filter(function(svg){
 		
 		let match = true
@@ -282,7 +326,7 @@ $('body').keyup(function(e){
 	}).length
 	
 	console.log('answer:', answer)
-	if (parseInt(e.key) === answer) {
+	if (value === answer) {
 		speak("That's right, " + answer, {
 			onend: function(){
 				make_cats()
@@ -295,7 +339,7 @@ $('body').keyup(function(e){
 		})
 	}
 
-})
+}
 
 
 </script>
