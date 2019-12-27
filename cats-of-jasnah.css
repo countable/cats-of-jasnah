@@ -3,7 +3,6 @@ body {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 15px;
     margin: 0;
-    padding: 0;
     text-align: center;
     overflow: hidden;
 }
@@ -13,15 +12,37 @@ body {
     height: 100%;
 }
 
-button {
-    cursor: pointer;
-    padding: 5px;
-}
-
 p {
     font-size: 22px;
     margin: 0;
     padding: 1em 0 0 0;
+}
+
+.coj-btn {
+    align-items: center;
+    background-color: #ffeef8;
+    border: 1px solid transparent;
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+    color: #000;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 1.5rem;
+    height: 40px;
+    justify-content: center;
+    margin: 4px 5px;
+    outline: 0;
+    padding: 0;
+    text-align: center;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    vertical-align: middle;
+    width: calc(16.66667% - 10px);
+}
+
+.coj-btn:focus {
+    background-color: #b3cdff;
 }
 
 .spinning {
@@ -120,26 +141,14 @@ h1 {
 
 .number-bar {
     position: fixed;
-    bottom: 0;
+    bottom: 1rem;
     left: 0;
     right: 0;
-    overflow: hidden;
-    height: 20vw;
     display: none;
-    font-size: 0.5vw;
 }
 
 .number-bar .desc {
-    font-size: 14px;
-    opacity: 0.7;
-}
-
-.number-bar span {
-    cursor: pointer;
-    font-size: 7vw;
-    padding: 0.8vw 2.5vw;
-    box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
-    background: #ffeef8;
+    display: none;
 }
 
 li {
@@ -162,29 +171,24 @@ svg {
     width: 14vmax;
 }
 
+@media (min-width: 768px) {
+    .coj-btn {
+        height: 60px;
+        width: 60px;
+    }
+
+    .number-bar .desc {
+        display: block;
+        font-size: 14px;
+        opacity: 0.7;
+        padding-top: 0.25rem;
+    }
+}
+
 /*some vmax/vh elements get crazy at hi-res, cap their size.*/
 @media screen and (min-width: 1024px) {
     svg {
         height: 160px;
         width: 140px;
     }
-
-    .number-bar span {
-        padding: 6px 24px;
-        font-size: 24px;
-    }
-
-    .number-bar {
-        height: 75px;
-    }
-}
-
-.noselect {
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Opera and Firefox */
 }
