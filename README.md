@@ -7,4 +7,6 @@ Enjoy!
 
 [Play the game](https://countable.github.io/cats-of-jasnah)
 
+Thanks for all the feedback folks from [Hacker News!](https://news.ycombinator.com/item?id=21880446#21886290)
+
 ![cats of jasnah](./cats.png)
