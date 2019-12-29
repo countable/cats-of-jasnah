@@ -1,177 +1,9 @@
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Cats of Jasnah. Teach your 4-year-old logic</title>
-<style>
-body {
-  background: #FFDDEE;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 15px;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  overflow: hidden;
-}
-html, 
-body {
-    height: 100%;
-}
-button {
-  cursor: pointer;
-  padding: 5px;
-}
-p {
-  font-size: 22px;
-  margin: 0;
-  padding: 1em 0 0 0;
-}
+	<link href="cats-of-jasnah.css" rel="stylesheet" type="text/css" />
 
-.spinning {
-  animation: 2s spin infinite;
-}
-.hidden {
-  display:none
-}
-svg .face {
-  fill:white
-}
-.smile, .frown {
-  display: none
-}
-.ducks .smile, .ducks .frown{
-  display: inline;
-  stroke: none;
-  fill:orange;
-}
-.mouth {
-  stroke: black;
-}
-.red .face {
-  fill:red
-}
-.blue .face {
-  fill:#2e2eff
-}
-.yellow .face {
-  fill:yellow
-}
-
-
-@keyframes spin {
-  0% {transform: translate(0, 0) rotate(0deg);}
-  50% {transform: translate(1em, -1em) rotate(360deg);}
-  100% {transform: translate(0, 0) rotate(0deg);}
-}
-
-.bouncing {
-	animation: bounce 2s infinite;
-	animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
-}
-@keyframes bounce {
-	0%   { transform: scale(1,1)      translateY(0); }
-	10%  { transform: scale(1.1,.9)   translateY(0); }
-	30%  { transform: scale(.9,1.1)   translateY(-50px); }
-	50%  { transform: scale(1.05,.95) translateY(0); }
-	57%  { transform: scale(1,1)      translateY(-5px); }
-	64%  { transform: scale(1,1)      translateY(0); }
-	100% { transform: scale(1,1)      translateY(0); }
-}
-h1 {
-	font-size: 2em;
-	font-variant: small-caps;
-	text-align: center;
-	text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
-	color: white;
-	margin: 0;
-	cursor:pointer;
-}
-.back, .forward {
-	font-size: 25px;
-	position: fixed;
-	top: 0;
-	width: 25px;
-	cursor: pointer;
-}
-.back {
-	left: 0;
-}
-.forward {
-	right: 0
-}
-.level-display {
-	box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
-	background: #ffeef8;
-	padding: 5px;
-	margin: 0;
-	text-align: center;
-	display: none
-}
-.number-bar {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	overflow: hidden;
-	height: 20vw;
-	display: none;
-	font-size: 0.5vw;
-}
-.number-bar .desc {
-	font-size: 14px;
-	opacity: 0.7;
-}
-.number-line {
-	
-}
-.number-bar span {
-	cursor: pointer;
-	font-size: 7vw;
-	padding: 0.8vw 2.5vw;
-	box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
-	background: #ffeef8;
-}
-li {
-	padding: 10px 5px;
-	list-style: none;
-	cursor: pointer;
-	margin: 7px;
-	box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
-	border-radius: 5px;
-	background: #ffeef8;
-}
-ul {
-	margin: 0;
-	padding: 0;
-}
-svg {
-	height: 14vmax;
-	width: 14vmax;
-}
-/*some vmax/vh elements get crazy at hi-res, cap their size.*/
-@media screen and (min-width: 1024px) {
-svg {
-	height: 160px;
-	width: 140px;
-}
-.number-bar span {
-	padding: 6px 24px;
-	font-size: 24px;
-}
-.number-bar {
-	height: 75px;
-}
-}
-
-.noselect {
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Opera and Firefox */
-}
-</style>
 </head>
 <body>
 <div class='back' onclick='set_level(Math.max(0,cur_level-1))'>&larr;</div>
@@ -182,21 +14,20 @@ svg {
 	LEVEL: <span class='level-number'></span>
 </div>
 
-<div class='number-bar no-select'>
+<div class='number-bar'>
 	<div class='number-line'>
-		<span onclick='submit(1)'>1</span>
-		<span onclick='submit(2)'>2</span>
-		<span onclick='submit(3)'>3</span>
-		<span onclick='submit(4)'>4</span>
-		<span onclick='submit(5)'>5</span>
-		<span onclick='submit(6)'>6</span>
-		<span onclick='submit(7)'>7</span>
-		<span onclick='submit(8)'>8</span>
-		<span onclick='submit(9)'>9</span>
-		<span onclick='submit(0)'>0</span>
+		<button class="coj-btn" onclick='submit(1)' type="button">1</button>
+		<button class="coj-btn" onclick='submit(2)' type="button">2</button>
+		<button class="coj-btn" onclick='submit(3)' type="button">3</button>
+		<button class="coj-btn" onclick='submit(4)' type="button">4</button>
+		<button class="coj-btn" onclick='submit(5)' type="button">5</button>
+		<button class="coj-btn" onclick='submit(6)' type="button">6</button>
+		<button class="coj-btn" onclick='submit(7)' type="button">7</button>
+		<button class="coj-btn" onclick='submit(8)' type="button">8</button>
+		<button class="coj-btn" onclick='submit(9)' type="button">9</button>
+		<button class="coj-btn" onclick='submit(0)' type="button">0</button>
 	</div>
 	<div class='desc'>
-		<br>
 		To answer questions, tap the numbers above or just use your keyboard.
 	</div>
 </div>
@@ -281,7 +112,6 @@ var set_level = function(level) {
 	
 	$(".level-number").text(level)
 	cur_level = level;
-	$('button').css('background-color','white').eq(level).css('background-color', 'yellow')
 	make_cats()
 }
 // returns whether a given value is to be negated.
