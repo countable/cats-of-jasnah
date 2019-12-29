@@ -7,6 +7,10 @@ Enjoy!
 
 [Play the game](https://countable.github.io/cats-of-jasnah)
 
+![cats of jasnah](./cats.png)
+
+### References
+
 Thanks for all the feedback, folks from [Hacker News!](https://news.ycombinator.com/item?id=21880446#21886290)
 
-![cats of jasnah](./cats.png)
+[The Game of Logic, Lewis Carroll](https://www.gutenberg.org/files/4763/4763-h/4763-h.htm)
