@@ -6,6 +6,7 @@ let ATTS
 let cur_atts = {}
 let cur_level = 0
 let clue
+// var audio = new Audio();
 
 const pick_rand = function(seq) {
   return seq[Math.floor(Math.random() * seq.length)]
@@ -81,7 +82,10 @@ const chance_for_level = function(level) {
 const speak = function(text, opts) {
   opts = opts || {}
   $('p').text(text)
-  responsiveVoice.speak(text, 'US English Female', opts)
+//   responsiveVoice.speak(text, 'US English Female', opts)
+  var audio = new Audio()
+  audio.src =`http://translate.google.com/translate_tts?ie=utf-8&tl=ur&q=${text}`
+  audio.play();
 }
 
 var make_cats = function() {
