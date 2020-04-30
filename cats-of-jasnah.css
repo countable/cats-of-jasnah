@@ -212,7 +212,12 @@ svg {
   from {transform: translate(-50%, -50%) scale(5);}
   to {transform: translate(-50%, -50%) scale(10);}
 }
-
+.topics {
+  display: flex;
+}
+.topics ul {
+  flex: 1;
+}
 .yay {
   animation-name: example;
   animation-duration: 2s;
