@@ -85,6 +85,10 @@ svg .face {
   fill: yellow;
 }
 
+.purple .face {
+  fill: #aa66ff;
+}
+
 @keyframes spin {
   0% {
     transform: translate(0, 0) rotate(0deg);
@@ -187,11 +191,31 @@ li {
 ul {
   margin: 0;
   padding: 0;
+  float:left;
 }
 
 svg {
   height: 14vmax;
   width: 14vmax;
+}
+#logo {
+  max-width: 100%
+}
+.splash {
+	top: 50%;
+	left: 50%;
+	z-index: 100;
+	position: fixed;
+	transform: translate(-50%, -50%) scale(10);
+}
+@keyframes example {
+  from {transform: translate(-50%, -50%) scale(5);}
+  to {transform: translate(-50%, -50%) scale(10);}
+}
+
+.yay {
+  animation-name: example;
+  animation-duration: 2s;
 }
 
 @media (min-width: 768px) {

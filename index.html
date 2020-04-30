@@ -5,13 +5,14 @@
     <link href="cats-of-jasnah.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <div class="back" onclick="set_level(Math.max(0,cur_level-1))">&larr;</div>
-    <div class="forward" onclick="set_level(Math.min(7,cur_level+1))">
+	<div class="splash" style="display:none">&starf;</div>
+    <div class="back" onclick="window.location.reload()">&larr;</div>
+    <div class="forward" onclick="next_level()">
       &rarr;
     </div>
     <h1 onclick="window.location.reload()">Cats of Jasnah</h1>
 
-    <div class="level-display">LEVEL: <span class="level-number"></span></div>
+    <div class="level-display">LEVEL: <span class="level-number"></span> | <span class=stars></span></div>
 
     <div class="number-bar">
       <div class="number-line">
@@ -30,7 +31,7 @@
         To answer questions, tap the numbers above or just use your keyboard.
       </div>
     </div>
-    <p></p>
+    <p class=clue onclick="speak(clue)"></p>
 
     <span id="forkongithub"
       ><a href="https://github.com/countable/cats-of-jasnah"
@@ -47,16 +48,8 @@
         questions), so check your volume.</b
       >
       Choose a level to start.<br /><br />
-      <ul>
-        <li onclick="set_level(0)">0. counting</li>
-        <li onclick="set_level(1)">1. one category</li>
-        <li onclick="set_level(2)">2. negation</li>
-        <li onclick="set_level(3)">3. combination</li>
-        <li onclick="set_level(4)">4. conjunction</li>
-        <li onclick="set_level(5)">5. negation and conjunction</li>
-        <li onclick="set_level(6)">6. triple combination</li>
-        <li onclick="set_level(7)">7. triple conjunction</li>
-      </ul>
+      <div class='topics'>
+	  </div>
     </div>
     <br />
     <svg class="hidden" viewbox="0 0 160 140">
@@ -105,6 +98,7 @@
       <!--<path d="M 75 90 L 65 90 A 5 10 0  0 0 75 90"
    style="stroke: #ff88dd; fill: #ffcccc"/>-->
     </svg>
+	<img id=logo src=raindough.png>
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 
     <script
@@ -112,6 +106,7 @@
       integrity="sha256-BTlTdQO9/fascB1drekrDVkaKd9PkwBymMlHOiG+qLI="
       crossorigin="anonymous"
     ></script>
+    <script src="./levels.js"></script>
     <script src="./cats-of-jasnah.js"></script>
   </body>
 </html>

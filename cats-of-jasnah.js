@@ -1,96 +1,68 @@
-const COLOR_ATTS = ['red', 'blue', 'yellow']
+const COLOR_ATTS = ['red', 'blue', 'yellow', 'purple']
 const MOTION_ATTS = ['bouncing', 'spinning']
 const ANIMAL_ATTS = ['ducks']
 const ALL_ATTS = COLOR_ATTS.concat(MOTION_ATTS).concat(ANIMAL_ATTS)
 let ATTS
 let cur_atts = {}
-let cur_level = 0
 let clue
+let stage
 
 const pick_rand = function(seq) {
   return seq[Math.floor(Math.random() * seq.length)]
 }
-const set_level = function(level) {
+const set_level = function(topic_num, stage_num) {
   // initialization
+  $('#logo').hide()
   $('.instructions').hide()
   $('#forkongithub').hide()
   $('.number-bar').show()
   $('.level-display').show()
 
-  $('.level-number').text(level)
-  cur_level = level
+  console.log(topic_num, stage_num)
+  if (stage_num >= TOPICS[topic_num].stages.length) {
+
+	  topic_num ++
+	  if (topic_num >= TOPICS.length) {
+		  return alert('this is the highest level already.')
+	  }
+	  stage_num = 0
+  }
+  stage = TOPICS[topic_num].stages[stage_num]
+  $('.level-number').text(
+	topic_num + '-' + stage_num + ' | ' + stage.name
+  )
+  
   make_cats()
 }
-// returns whether a given value is to be negated.
-const level_get_negation = function(level) {
-  if (level === 2) return false
-  if (level === 6) return true
-  if (level >= 5) return Math.random() > 0.4
-  return true
-}
-const cats_for_level = function(level) {
-  min_cats = level + 1
-  max_cats = level + 5
 
-  return Math.floor(Math.random() * (max_cats + 1 - min_cats)) + min_cats
-}
-const set_avail_atts = function() {
-  if (cur_level == 0) {
-    ATTS = []
-  } else if (cur_level <= 2) {
-    ATTS = [pick_rand(ALL_ATTS)]
-  } else if (cur_level <= 5) {
-    ATTS = [pick_rand(COLOR_ATTS), pick_rand(MOTION_ATTS)]
-  } else {
-    ATTS = [
-      pick_rand(COLOR_ATTS),
-      pick_rand(MOTION_ATTS),
-      pick_rand(ANIMAL_ATTS)
-    ]
-  }
-}
-const get_level_num_adjectives = function(level, keys) {
-  // get the number of categories used as adjectives, given a list of
-  // categories. More is generally
-  // easier.
-  let pos = Math.floor(Math.random() * (keys.length + 1))
-  if (level == 3) pos = keys.length // combination level
-  if (level == 4) pos = 0 // conjunction level
-  if (level < 7) {
-    // all but one an adjective before level 7
-    if (pos > keys.length - 1) {
-      pos = keys.length - 1
-    }
-  } else {
-    pos = 0
-  }
-  return pos
-}
 const permute_atts = function() {
   cur_atts = {}
-  for (let i = 0; i < ATTS.length; i++) {
-    if (Math.random() > 0.2) {
-      cur_atts[ATTS[i]] = level_get_negation(cur_level)
+  for (let i = 0; i < ATTS.length && i < stage.max_asked_atts; i++) {
+    if (Math.random() < stage.att_chance) {
+      cur_atts[ATTS[i]] = !stage.get_value('negation')
     }
   }
 }
 
-const chance_for_level = function(level) {
-  return 0.5 + Math.random() * (level / 40) // increased match chance as levels progress, sometimes.
-}
+
 const speak = function(text, opts) {
   opts = opts || {}
-  $('p').text(text)
+  $('p.clue').html(text + "&#x1f508;")
   responsiveVoice.speak(text, 'US English Female', opts)
 }
 
+const draw_stars = function() {
+  $('.stars').html(stage.get_stars() + '&starf;')
+}
+
 var make_cats = function() {
-  set_avail_atts()
+  draw_stars()
+  stage.set_avail_atts()
   permute_atts()
   is_reversed = Math.random() < 0.5
   let text = 'how many '
   const keys = Object.keys(cur_atts)
-  const prefix_pos = get_level_num_adjectives(cur_level, keys)
+  const prefix_pos = stage.get_num_adjectives(keys)
   const prefix_keys = keys.slice(0, prefix_pos)
   if (prefix_keys.length) {
     let prefix_words = []
@@ -107,30 +79,32 @@ var make_cats = function() {
   if (postfix_keys.length) {
     text += 'cats are '
 
-    let conjunctions = []
+    let items = []
     for (let att in postfix_keys) {
-      conjunctions.push(
+      items.push(
         (cur_atts[postfix_keys[att]] ? '' : 'not ') + postfix_keys[att]
       )
     }
-    console.log(conjunctions)
-    text += conjunctions.join(' and are ')
+    text += items.join(' ' + stage.operator + ' are ')
   } else {
     text += 'cats are here'
   }
   text += '?'
 
   // substitution.
-  if (Math.random() < 0.5) text = text.replace(/not.blue/, 'white')
-  if (Math.random() < 0.5) text = text.replace(/not.red/, 'white')
-  if (Math.random() < 0.5) text = text.replace(/not.yellow/, 'white')
+  if (stage.get_value('substitution')) {1
+	if (Math.random() < 0.5) {
+	  text = text.replace(/not.blue/, 'white')
+	  text = text.replace(/not.red/, 'white')
+	  text = text.replace(/not.yellow/, 'white')
+	}
+  }
 
   clue = text
-  speak(text)
 
   // remove existing cats and add new ones for the current level.
   $('svg:gt(0)').remove()
-  var num_cats = cats_for_level(cur_level)
+  num_cats = stage.num_cats()
   for (var i = 0; i < num_cats; i++) {
     $('svg')
       .eq(0)
@@ -142,13 +116,12 @@ var make_cats = function() {
 
         for (var att = 0; att < ATTS.length; att++) {
           if (cur_atts[ATTS[att]] === true) {
-            chance = chance_for_level(cur_level)
+            chance = stage.chance()
           } else if (cur_atts[ATTS[att]] === false) {
-            chance = 1 - chance_for_level(cur_level)
+            chance = 1 - stage.chance()
           } else {
             chance = 0.5
           }
-          console.log(chance)
           if (Math.random() < chance) $t.addClass(ATTS[att])
         }
       })
@@ -156,27 +129,40 @@ var make_cats = function() {
 
   if (get_answer().length > 9) {
     console.log('Too many cats, generate a new puzzle.')
-    make_cats()
+    return make_cats()
+  } else if (get_answer().length == 0 &! stage.min > 0) {
+    console.log('not enough cats.')
+    return make_cats()
   }
+  
+  speak(clue)
 }
 
+const next_level = function(){
+	let next_stage_num = stage.number + 1
+	set_level(stage.topic.topic_number, next_stage_num)
+}
 const sound = function(s) {
   var snd = new Audio(s + '.mp3')
   snd.play()
 }
 
 $('body').keyup(function(e) {
+  if (e.key === ' ') return next_level()
   if (!/\d/.test(e.key)) return
   submit(parseInt(e.key))
 })
 
 const get_answer = function() {
   return $('svg:visible').filter(function(svg) {
-    let match = true
+    let match = stage.operator === 'and';
     for (let att in cur_atts) {
+	  // consider negation
+	  let in_set = (cur_atts[att] ? $(this).hasClass(att) : !$(this).hasClass(att));	
+	  // conjunction / disjunction
       match =
-        match &&
-        (cur_atts[att] ? $(this).hasClass(att) : !$(this).hasClass(att))
+        stage.operator === 'and' ? (match && in_set) : (match || in_set)
+      
     }
     return match
   })
@@ -185,18 +171,41 @@ const get_answer = function() {
 const submit = function(value) {
   let answer = get_answer()
   answer.addClass('circle')
-  console.log('answer:', answer.length)
   if (value === answer.length) {
-    speak("That's right, " + answer.length, {
+	stage.add_star()
+	yay()
+	let congrats = "That's right, " + answer.length + '.'
+	if (stage.get_stars() == 5) {
+	  congrats += ' Level complete!'
+	}
+    speak(congrats, {
       onend: function() {
-        make_cats()
+		if (stage.get_stars() == 5) {
+		  next_level()
+		} else {
+		  make_cats()
+		}
       }
     })
   } else {
     speak("Good try, but that's wrong.", {
       onend: function() {
+		stage.lose_stars()
+		draw_stars()
         speak(clue)
       }
     })
   }
+}
+
+const n_str = function(n, s) {
+	if (n < 2) return s
+	return s + n_str(n-1, s)
+}
+
+const yay = function() {
+	$(".splash").html(n_str(stage.get_stars(), '&starf;')).show().addClass('yay')
+	setTimeout(function(){
+		$('.splash').hide().removeClass('yay')
+	}, 2000);
 }
