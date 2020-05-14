@@ -207,7 +207,7 @@ const TOPICS = [
 				max_asked_atts: 2,
 				num_atts: 2,
 				min: 2, max: 5,
-				num_adjectives: 1,
+				num_adjectives: 0,
 				operator: 'or'
 			},
 			{
