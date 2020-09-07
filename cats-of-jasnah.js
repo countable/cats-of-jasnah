@@ -27,7 +27,9 @@ const set_level = function(topic_num, stage_num) {
 	  }
 	  stage_num = 0
   }
-  stage = TOPICS[topic_num].stages[stage_num]
+  stage = {}
+  stage.__proto__ = TOPICS[topic_num].stages[stage_num]
+
   $('.level-number').text(
 	topic_num + '-' + stage_num + ' | ' + stage.name
   )
@@ -56,6 +58,7 @@ const draw_stars = function() {
 }
 
 var make_cats = function() {
+  stage.init()
   draw_stars()
   stage.set_avail_atts()
   permute_atts()
@@ -77,7 +80,7 @@ var make_cats = function() {
   }
   postfix_keys = keys.slice(prefix_pos)
   if (postfix_keys.length) {
-    text += 'cats are '
+    text += 'cats ' + stage.get_equality_operator() + ' '
 
     let items = []
     for (let att in postfix_keys) {
@@ -87,7 +90,11 @@ var make_cats = function() {
     }
     text += items.join(' ' + stage.operator + ' are ')
   } else {
-    text += 'cats are here'
+    text += 'cats ' + stage.get_equality_operator() + ' here'
+  }
+  if (stage.successor) {
+	  text += ' if we had ' + Math.abs(stage.successor) + ' '
+		+ (stage.successor > 0 ? 'more' : 'less')
   }
   text += '?'
 
@@ -169,22 +176,25 @@ const get_answer = function() {
 }
 
 const submit = function(value) {
-  let answer = get_answer()
-  answer.addClass('circle')
-  if (value === answer.length) {
+  let answer_set = get_answer()
+  answer = answer_set.length + stage.get_added_num()
+  console.log("COMPARING", value, 'to answer', answer)
+  answer_set.addClass('circle')
+  
+  if (value === answer) {
 	stage.add_star()
-	yay()
-	let congrats = "That's right, " + answer.length + '.'
+	//yay()
+	let congrats = "That's right, " + answer + '.'
 	if (stage.get_stars() == 5) {
-	  congrats += ' Level complete!'
+	  congrats += " You're on a Winning Streak!"
 	}
     speak(congrats, {
       onend: function() {
-		if (stage.get_stars() == 5) {
+		/*if (stage.get_stars() == 5) {
 		  next_level()
-		} else {
+		} else {*/
 		  make_cats()
-		}
+		//}
       }
     })
   } else {

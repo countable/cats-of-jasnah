@@ -1,6 +1,13 @@
 
 
 const Level = {
+	init: function(){
+        if (this.addition > 0) {
+			this.successor = Math.floor(Math.random() * this.addition + 1)
+		} else if (this.addition < 0) { // range from negative 1 to negative N
+			this.successor = Math.floor(Math.random() * this.addition*-1 + 1) * -1
+		}
+	},
 	num_cats: function(){
 		return Math.floor(Math.random() * (this.max + 1 - this.min)) + this.min
 	},
@@ -50,6 +57,20 @@ const Level = {
 	},
 	lose_stars: function() {
 		localStorage[this.get_key()] = 0
+	},
+	get_equality_operator: function() {
+		if (this.successor) {
+			return 'would be'
+		} else {
+			return 'are'
+		}
+	},
+	get_added_num: function() {
+		if (this.successor) {
+			return this.successor
+		} else {
+			return 0
+		}
 	}
 }
 
@@ -66,24 +87,10 @@ const TOPICS = [
 				num_atts: 0
 			},
 			{
-				name: 'cardinals',
-				min: 3,
-				max: 5,
-				max_asked_atts: 0,
-				num_atts: 0
-			},
-			{
 				name: 'big cardinals',
 				min: 4,
 				max_asked_atts: 0,
 				num_atts: 0
-			},
-			{
-				name: 'little distraction',
-				min: 1,
-				max: 5,
-				max_asked_atts: 0,
-				num_atts: 1
 			},
 			{
 				name: 'distraction',
@@ -101,7 +108,6 @@ const TOPICS = [
 			{
 				name: 'with zero',
 				max: 2,
-				num_atts: 0,
 				max_asked_atts: 0,
 				num_atts: 3
 			},
@@ -235,20 +241,55 @@ const TOPICS = [
 				negation: [false, false, true]
 			}
 		]
-	}/*,
+	},
 	{
 		name: 'arithmetic group',
 		stages: [
-			'successor', // if we had another, how many cats would there be?
-			'successor successor', // if we had two more, how many cats would there be?
-			'addition', // if we had N more, how many cats would there be?
-			'inverse successor', // if we had one fewer cat, how many there be?
-			'subtraction', // if we had N fewer cats, how many would there be?
+			{
+				name:'successor', // if we had another, how many cats would there be
+				successor: 1,
+				num_adjectives: 0,
+				max_asked_atts: 0,
+				max: 3,
+				num_atts: 0
+			},
+			{
+				name:'successor successor', // if we had two more, how many cats would there be?
+				successor: 2,
+				num_adjectives: 0,
+				max_asked_atts: 0,
+				num_atts: 0,
+				max: 7
+			},
+			{
+				name:'addition', // if we had two more, how many cats would there be?
+				addition: 4,
+				num_adjectives: 0,
+				max_asked_atts: 0,
+				num_atts: 0,
+				max: 5
+			},
+			{
+				name:'inverse successor', // if we had two more, how many cats would there be?
+				successor: -1,
+				num_adjectives: 0,
+				max_asked_atts: 0,
+				num_atts: 0,
+				min: 1
+			},
+			{
+				name:'subtraction', // if we had two more, how many cats would there be?
+				addition: -4,
+				num_adjectives: 0,
+				max_asked_atts: 0,
+				num_atts: 0,
+				min: 4
+			}/*,
 			'successor subset',
 			'addition subset',
-			'subtraction subset'
+			'subtraction subset'*/
 		]
-	},
+	}/*,
 	{
 		name: 'word problems',
 		stages: [
