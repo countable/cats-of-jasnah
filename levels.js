@@ -2,10 +2,11 @@
 
 const Level = {
 	init: function(){
+		
         if (this.addition > 0) {
-			this.successor = Math.floor(Math.random() * this.addition + 1)
+			this.successor = Math.floor(Math.random() * (this.addition) + 1)
 		} else if (this.addition < 0) { // range from negative 1 to negative N
-			this.successor = Math.floor(Math.random() * this.addition*-1 + 1) * -1
+			this.successor = Math.floor(Math.random() * (this.addition * -1) + 1) * -1
 		}
 	},
 	num_cats: function(){
@@ -267,7 +268,7 @@ const TOPICS = [
 				num_adjectives: 0,
 				max_asked_atts: 0,
 				num_atts: 0,
-				max: 5
+				max: 6
 			},
 			{
 				name:'inverse successor', // if we had two more, how many cats would there be?

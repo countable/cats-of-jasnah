@@ -52,6 +52,9 @@ p {
 .hidden {
   display: none;
 }
+.ghost {
+  opacity: 0.5;
+}
 
 svg .face {
   fill: white;

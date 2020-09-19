@@ -71,7 +71,7 @@ var make_cats = function() {
     let prefix_words = []
     for (let att in prefix_keys) {
       prefix_words.push(
-        (cur_atts[prefix_keys[att]] ? '' : 'not-') + prefix_keys[att]
+        (cur_atts[prefix_keys[att]] ? '' : 'non-') + prefix_keys[att]
       )
     }
     text += prefix_words.join(', ') + ' '
@@ -93,8 +93,14 @@ var make_cats = function() {
     text += 'cats ' + stage.get_equality_operator() + ' here'
   }
   if (stage.successor) {
-	  text += ' if we had ' + Math.abs(stage.successor) + ' '
-		+ (stage.successor > 0 ? 'more' : 'less')
+	  // alternate wording
+	  if (Math.random() > .5) {
+		  text += ' if we had ' + Math.abs(stage.successor) + ' '
+			+ (stage.successor > 0 ? 'more' : 'less')
+	  } else {
+		  text += ' if ' + Math.abs(stage.successor) + ' '
+			+ (stage.successor > 0 ? 'more came' : 'went away')
+	  }
   }
   text += '?'
 
@@ -112,7 +118,7 @@ var make_cats = function() {
   // remove existing cats and add new ones for the current level.
   $('svg:gt(0)').remove()
   num_cats = stage.num_cats()
-  for (var i = 0; i < num_cats; i++) {
+  for (var i = 0; i < num_cats + stage.get_added_num(); i++) {
     $('svg')
       .eq(0)
       .clone()
@@ -120,7 +126,9 @@ var make_cats = function() {
       .each(function(svg) {
         const $t = $(this)
         $(this).removeClass('hidden')
-
+		if (i >= num_cats) {
+			$(this).addClass('hidden')
+		}
         for (var att = 0; att < ATTS.length; att++) {
           if (cur_atts[ATTS[att]] === true) {
             chance = stage.chance()
@@ -133,6 +141,7 @@ var make_cats = function() {
         }
       })
   }
+  console.log('num_cats rendered', num_cats + stage.get_added_num(), $('svg:gt(0)').length)
 
   if (get_answer().length > 9) {
     console.log('Too many cats, generate a new puzzle.')
@@ -161,7 +170,7 @@ $('body').keyup(function(e) {
 })
 
 const get_answer = function() {
-  return $('svg:visible').filter(function(svg) {
+  let set = $('svg:gt(0)').filter(function(svg) {
     let match = stage.operator === 'and';
     for (let att in cur_atts) {
 	  // consider negation
@@ -173,13 +182,17 @@ const get_answer = function() {
     }
     return match
   })
+  set = set.slice(0, $('svg:visible').length + stage.get_added_num())
+  console.log(set.length, 'answer size counted', set)
+  return set
 }
 
 const submit = function(value) {
   let answer_set = get_answer()
-  answer = answer_set.length + stage.get_added_num()
+  answer = answer_set.length
   console.log("COMPARING", value, 'to answer', answer)
   answer_set.addClass('circle')
+  answer_set.filter('.hidden').addClass('ghost').removeClass('hidden')
   
   if (value === answer) {
 	stage.add_star()
