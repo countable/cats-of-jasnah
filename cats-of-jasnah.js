@@ -102,6 +102,7 @@ var make_cats = function() {
 			+ (stage.successor > 0 ? 'more came' : 'went away')
 	  }
   }
+ 
   text += '?'
 
   // substitution.

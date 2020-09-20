@@ -18,6 +18,11 @@ p {
   padding: 1em 0 0 0;
 }
 
+.instructions {
+	position: relative;
+	z-index: 10000;
+	padding: 25px 25px;
+}
 .coj-btn {
   align-items: center;
   background-color: #ffeef8;
