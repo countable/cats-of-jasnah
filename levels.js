@@ -2,8 +2,7 @@
 
 const Level = {
 	init: function(){
-		
-        if (this.addition > 0) {
+    if (this.addition > 0) {
 			this.successor = Math.floor(Math.random() * (this.addition) + 1)
 		} else if (this.addition < 0) { // range from negative 1 to negative N
 			this.successor = Math.floor(Math.random() * (this.addition * -1) + 1) * -1
@@ -285,10 +284,31 @@ const TOPICS = [
 				max_asked_atts: 0,
 				num_atts: 0,
 				min: 4
-			}/*,
-			'successor subset',
-			'addition subset',
-			'subtraction subset'*/
+			},
+			{
+        name: 'successor subset', // if we had another pink cats, how many pink cats would there be?
+        successor: 1,
+        num_adjectives: 0,
+        max_asked_atts: 1,
+        num_atts: 1,
+        max: 8
+      },
+      {
+        name: 'addition subset', // if we had two more pink cats, how many pink cats would there be?
+        addition: 4,
+        num_adjectives: 0,
+        max_asked_atts: 1,
+        num_atts: 1,
+        max: 5
+      },
+      {
+        name: 'subtraction subset', // if we had two less pink cats, how many cats would there be?
+        addition: -4,
+        num_adjectives: 0,
+        max_asked_atts: 1,
+        num_atts: 1,
+        min: 4
+      }
 		]
 	}/*,
 	{
