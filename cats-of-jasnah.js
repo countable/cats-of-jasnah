@@ -7,6 +7,10 @@ let cur_atts = {}
 let clue
 let stage
 
+const pluralize_cat = function(count) {
+  return Math.abs(count) > 1 ? 'cats' : 'cat';
+};
+
 const pick_rand = function(seq) {
   return seq[Math.floor(Math.random() * seq.length)]
 }
@@ -93,13 +97,16 @@ var make_cats = function() {
     text += 'cats ' + stage.get_equality_operator() + ' here'
   }
   if (stage.successor) {
-	  // alternate wording
+    // alternate wording
 	  if (Math.random() > .5) {
 		  text += ' if we had ' + Math.abs(stage.successor) + ' '
-			+ (stage.successor > 0 ? 'more' : 'less')
+      + (stage.successor > 0 ? 'more ' : 'less ')
+      + (ATTS.length ? ATTS[0] + ' ' + pluralize_cat(stage.successor): '')
 	  } else {
 		  text += ' if ' + Math.abs(stage.successor) + ' '
-			+ (stage.successor > 0 ? 'more came' : 'went away')
+      + (stage.successor > 0
+        ? 'more ' + (ATTS.length ? ATTS[0] + ' ' + pluralize_cat(stage.successor) + ' ' : '') + 'came'
+        : (ATTS.length ? ATTS[0] + ' ' + pluralize_cat(stage.successor) + ' ' : '') + 'went away')
 	  }
   }
  
@@ -127,11 +134,14 @@ var make_cats = function() {
       .each(function(svg) {
         const $t = $(this)
         $(this).removeClass('hidden')
-		if (i >= num_cats) {
-			$(this).addClass('hidden')
-		}
+        if (i >= num_cats) {
+          $(this).addClass('hidden')
+        }
         for (var att = 0; att < ATTS.length; att++) {
-          if (cur_atts[ATTS[att]] === true) {
+          if (i >= num_cats) {
+            // for now set 1 (will chance base on gameplay)
+            chance = 1;
+          } else if (cur_atts[ATTS[att]] === true) {
             chance = stage.chance()
           } else if (cur_atts[ATTS[att]] === false) {
             chance = 1 - stage.chance()
@@ -143,11 +153,11 @@ var make_cats = function() {
       })
   }
   console.log('num_cats rendered', num_cats + stage.get_added_num(), $('svg:gt(0)').length)
-
-  if (get_answer().length > 9) {
+  const num_answer = get_answer().length
+  if (num_answer > 9) {
     console.log('Too many cats, generate a new puzzle.')
     return make_cats()
-  } else if (get_answer().length == 0 &! stage.min > 0) {
+  } else if (num_answer == 0 &! stage.min > 0) {
     console.log('not enough cats.')
     return make_cats()
   }
@@ -183,7 +193,11 @@ const get_answer = function() {
     }
     return match
   })
-  set = set.slice(0, $('svg:visible').length + stage.get_added_num())
+  if (set.length + stage.get_added_num() < 0) {
+    // return invalid answer to generate again
+    return { length: 10 }
+  }
+  set = set.slice(0, set.length + stage.get_added_num())
   console.log(set.length, 'answer size counted', set)
   return set
 }
