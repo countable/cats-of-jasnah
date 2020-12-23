@@ -17,7 +17,17 @@ p {
   margin: 0;
   padding: 1em 0 0 0;
 }
-
+.trophy {
+	position:fixed;
+	display:none;
+	top: 50%;
+	height: 30vmax;
+	left: 50%;
+	margin-left:-15vmax;
+	margin-top:-20vmax;
+	z-index: 10000;
+	box-shadow: 10px 10px 50px 50px rgba(50,0,0,0.2);
+}
 .instructions {
 	position: relative;
 	z-index: 10000;

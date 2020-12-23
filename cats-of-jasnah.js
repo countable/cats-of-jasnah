@@ -215,6 +215,7 @@ const submit = function(value) {
 	let congrats = "That's right, " + answer + '.'
 	if (stage.get_stars() == 5) {
 	  congrats += " You're on a Winning Streak!"
+	  $('.trophy').show()
 	}
     speak(congrats, {
       onend: function() {
@@ -222,6 +223,8 @@ const submit = function(value) {
 		  next_level()
 		} else {*/
 		  make_cats()
+		  
+			$('.trophy').hide()
 		//}
       }
     })
