@@ -11,7 +11,14 @@ html,
 body {
   height: 100%;
 }
-
+.github {
+	position: absolute;
+	display: block;
+	bottom: 0;
+	right: 0;
+	z-index: 111;
+	font-size: 2vmin;
+}
 p {
   font-size: 22px;
   margin: 0;
