@@ -14,3 +14,5 @@ Enjoy!
 Thanks for all the feedback, folks from [Hacker News!](https://news.ycombinator.com/item?id=21880446#21886290)
 
 [The Game of Logic, Lewis Carroll](https://www.gutenberg.org/files/4763/4763-h/4763-h.htm)
+
+A work by [RainDough](https://countable.github.io/raindough/)
