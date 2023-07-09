@@ -43,7 +43,6 @@ const Level = {
 		  pick_rand(MOTION_ATTS),
 		  pick_rand(ANIMAL_ATTS)
 		].slice(0,this.num_atts)
-		console.log(ATTS, this.num_atts)
 	},
 	negation: false,
 	get_stars: function() {
